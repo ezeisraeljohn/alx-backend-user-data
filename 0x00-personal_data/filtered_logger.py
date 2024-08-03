@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 
+import logging
 import re
+from typing import Union, List
 
 """ This module encrypts a password using the sha256 algorithm. """
 
 
-def filter_datum(fields, redaction, message, separator):
+def filter_datum(
+    fields: List[str], redaction: str, message: str, separator: str
+) -> str:
     """Function that returns the log message obfuscated"""
     for field in fields:
         for field in fields:
