@@ -31,3 +31,9 @@ def stats() -> str:
 def unauthorized() -> str:
     """GET aunauthorized"""
     abort(401, description="Unauthorized")
+
+
+@app_views.route("/forbidden", methods=["GET"], strict_slashes=False)
+def forbedden() -> str:
+    """Get forbedden"""
+    abort(403, description="Forbidden")
