@@ -20,7 +20,7 @@ class Auth:
             return True
         if not excluded_paths:
             return True
-        if f"{path}/" in excluded_paths:
+        if f"{path}/" in excluded_paths or f"{path}*" in excluded_paths:
             return False
         if path not in excluded_paths:
             return True
