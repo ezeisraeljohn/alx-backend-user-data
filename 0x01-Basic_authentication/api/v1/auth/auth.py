@@ -35,4 +35,4 @@ class Auth:
 
     def current_user(self, request=None) -> User:
         """The current_user"""
-        return request
+        return None
