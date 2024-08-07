@@ -5,6 +5,7 @@
 
 from .auth import Auth
 import base64
+from typing import Tuple
 
 
 class BasicAuth(Auth):
@@ -37,3 +38,16 @@ class BasicAuth(Auth):
             return decode_str
         except:
             return None
+
+    def extract_user_credentials(
+        self, decoded_base64_authorization_header: str
+    ) -> Tuple[str, str]:
+        """Extracts user credentials"""
+        if not isinstance(decoded_base64_authorization_header, str):
+            return (None, None)
+        if not decoded_base64_authorization_header:
+            return (None, None)
+        if ":" not in decoded_base64_authorization_header:
+            return (None, None)
+        email, password = decoded_base64_authorization_header.split(":")
+        return (email, password)
