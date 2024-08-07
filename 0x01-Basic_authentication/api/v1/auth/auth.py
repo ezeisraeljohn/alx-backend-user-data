@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+
+""" This module houses the different auth methods"""
+
+
 from flask import Flask
 from typing import List, TypeVar
 
