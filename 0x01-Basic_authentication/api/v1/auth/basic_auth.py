@@ -67,3 +67,20 @@ class BasicAuth(Auth):
         if not user_list[0].is_valid_password(user_pwd):
             return None
         return user_list[0]
+
+    def current_user(self, request=None) -> TypeVar("User"):
+        """This overides the current user"""
+        authorization = self.authorization_header(request)
+        if not authorization:
+            return
+        auth_part = self.extract_base64_authorization_header(authorization)
+        if not auth_part:
+            return
+        decoded_string = self.decode_base64_authorization_header(auth_part)
+        if not decoded_string:
+            return
+        email, password = self.extract_user_credentials(decoded_string)
+        if not email or not password:
+            return
+        user = self.user_object_from_credentials(email, password)
+        return user
