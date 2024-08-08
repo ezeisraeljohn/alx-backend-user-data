@@ -6,7 +6,7 @@
 from flask import Flask
 from typing import List, TypeVar
 from models.user import User
-
+import re
 
 User = TypeVar("User")
 
@@ -20,11 +20,15 @@ class Auth:
             return True
         if not excluded_paths:
             return True
-        if f"{path}/" in excluded_paths or f"{path}*" in excluded_paths:
+        if f"{path}/" in excluded_paths:
             return False
         if path not in excluded_paths:
             return True
         if path in excluded_paths:
+            return False
+        for pattern in excluded_paths:
+            regex_pattern = re.escape(pattern).replace("\\*", ".*")
+        if re.match(regex_pattern, path):
             return False
 
     def authorization_header(self, request=None) -> str:
