@@ -36,6 +36,5 @@ class DB:
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
         self._session.commit()
-        self.__session.refresh(user)
         new_user = self.__session.query(User).filter_by(email=email).first()
         return new_user
