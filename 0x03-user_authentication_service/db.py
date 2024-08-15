@@ -13,12 +13,10 @@ from user import Base, User
 
 
 class DB:
-    """DB class
-    """
+    """DB class"""
 
     def __init__(self) -> None:
-        """Initialize a new DB instance
-        """
+        """Initialize a new DB instance"""
         self._engine = create_engine("sqlite:///a.db", echo=True)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
@@ -26,8 +24,7 @@ class DB:
 
     @property
     def _session(self) -> Session:
-        """Memoized session object
-        """
+        """Memoized session object"""
         if self.__session is None:
             DBSession = sessionmaker(bind=self._engine)
             self.__session = DBSession()
@@ -42,19 +39,19 @@ class DB:
         return new_user
 
     def find_user_by(self, *args, **kwargs):
-        """ Fine a user"""
+        """Fine a user"""
         if kwargs:
             user = self._session.query(User).filter_by(**kwargs).first()
             if not user:
                 raise NoResultFound
             else:
                 return user
-            
+
     def update_user(self, user_id, **kwargs):
         """updates a user"""
         user = self.find_user_by(id=user_id)
         allowed_fields = ["id", "email", "hashed_password",
-                               "session_id", "reset_token"]
+                          "session_id", "reset_token"]
         if user:
             for key, value in kwargs.items():
                 if key not in allowed_fields:
@@ -62,4 +59,3 @@ class DB:
                 else:
                     setattr(user, key, value)
         return None
-    
