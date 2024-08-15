@@ -10,7 +10,7 @@ from sqlalchemy.exc import InvalidRequestError
 import uuid
 
 
-def _hash_password(password):
+def _hash_password(password: str) -> bytes:
     """This method hashes a password"""
     salt = bcrypt.gensalt()
     byte_password = password.encode("utf-8")
@@ -29,7 +29,7 @@ class Auth:
     def __init__(self):
         self._db = DB()
 
-    def register_user(self, email, password):
+    def register_user(self, email: str, password: str) -> User:
         """Registers users"""
         try:
             user = self._db.find_user_by(email=email)
@@ -41,7 +41,7 @@ class Auth:
             self._db._session.add(new_user)
             return new_user
 
-    def valid_login(self, email, password):
+    def valid_login(self, email: str, password: str) -> bool:
         """Login Option"""
         try:
             user = self._db.find_user_by(email=email)
