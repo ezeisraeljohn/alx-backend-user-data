@@ -18,7 +18,7 @@ def _hash_password(password):
     return hashed_password
 
 
-def _generate_uuid():
+def _generate_uuid() -> str:
     """Generates a new uuid"""
     return str(uuid.uuid4())
 
