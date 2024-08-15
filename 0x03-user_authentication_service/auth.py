@@ -51,7 +51,7 @@ class Auth:
         except (NoResultFound, InvalidRequestError):
             return False
 
-    def create_session(self, email: str) -> uuid:
+    def create_session(self, email: str) -> str:
         """Creates a session id"""
         generated_id = _generate_uuid()
         try:
@@ -79,3 +79,13 @@ class Auth:
             return None
         except (NoResultFound, InvalidRequestError):
             return None
+
+    def get_reset_password_token(self, email: str) -> str:
+        """Returns a password reset token"""
+        try:
+            user = self._db.find_user_by(email=email)
+            token = _generate_uuid()
+            user.reset_token = token
+            return token
+        except (NoResultFound, InvalidRequestError):
+            raise ValueError
