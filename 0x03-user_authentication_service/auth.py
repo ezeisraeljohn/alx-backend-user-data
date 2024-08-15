@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+
+""" This method houses the security"""
+
+import bcrypt
+from db import DB
+from user import User
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
+
+def _hash_password(password):
+    """This method hashes a password"""
+    salt = bcrypt.gensalt()
+    byte_password = password.encode('utf-8')
+    hashed_password = bcrypt.hashpw(salt=salt, password=byte_password)
+    return hashed_password
+
+
+
+class Auth:
+    """Auth class to interact with the authentication database.
+    """
+
+    def __init__(self):
+        self._db = DB()
+
+    def register_user(self, email, password):
+        """ Registers users"""
+        try:
+           user = self._db.find_user_by(email=email)
+           if user:
+               raise ValueError(f"User {user.email} already exists")     
+        except (InvalidRequestError, NoResultFound):
+            hashed_password = _hash_password(password)
+            new_user = User(email=email, hashed_password=hashed_password)
+            self._db._session.add(new_user)
+            return new_user
