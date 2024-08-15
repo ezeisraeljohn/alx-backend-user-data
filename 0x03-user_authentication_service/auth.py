@@ -54,6 +54,9 @@ class Auth:
     def create_session(self, email: str) -> uuid:
         """Creates a session id"""
         generated_id = _generate_uuid()
-        user = self._db._session.query(User).filter_by(email=email).first()
-        setattr(user, "session_id", generated_id)
-        return generated_id
+        try:
+            user = self._db.find_user_by(email=email)
+            setattr(user, "session_id", generated_id)
+            return generated_id
+        except (NoResultFound, InvalidRequestError):
+            return None
