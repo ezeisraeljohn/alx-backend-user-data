@@ -49,3 +49,17 @@ class DB:
                 raise NoResultFound
             else:
                 return user
+            
+    def update_user(self, user_id, **kwargs):
+        """updates a user"""
+        user = self.find_user_by(id=user_id)
+        allowed_fields = ["id", "email", "hashed_password",
+                               "session_id", "reset_token"]
+        if user:
+            for key, value in kwargs.items():
+                if key not in allowed_fields:
+                    raise ValueError
+                else:
+                    setattr(user, key, value)
+        return None
+    
