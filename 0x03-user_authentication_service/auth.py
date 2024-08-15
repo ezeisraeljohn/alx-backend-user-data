@@ -50,3 +50,10 @@ class Auth:
             return bcrypt.checkpw(encoded_password, hashed_password)
         except (NoResultFound, InvalidRequestError):
             return False
+
+    def create_session(self, email):
+        """Creates a session id"""
+        generated_id = _generate_uuid()
+        user = self._db._session.query(User).filter_by(email=email).first()
+        setattr(user, "session_id", generated_id)
+        return generated_id
