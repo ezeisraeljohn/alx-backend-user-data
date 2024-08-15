@@ -51,7 +51,7 @@ class Auth:
         except (NoResultFound, InvalidRequestError):
             return False
 
-    def create_session(self, email):
+    def create_session(self, email: str) -> uuid:
         """Creates a session id"""
         generated_id = _generate_uuid()
         user = self._db._session.query(User).filter_by(email=email).first()
