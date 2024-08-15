@@ -34,3 +34,13 @@ class Auth:
             new_user = User(email=email, hashed_password=hashed_password)
             self._db._session.add(new_user)
             return new_user
+
+    def valid_login(self, email, password):
+        """Login Option"""
+        try:
+            user = self._db.find_user_by(email=email)
+            hashed_password = user.hashed_password
+            encoded_password = password.encode("utf-8")
+            return bcrypt.checkpw(encoded_password, hashed_password)
+        except (NoResultFound, InvalidRequestError):
+            return False
