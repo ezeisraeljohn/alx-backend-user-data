@@ -40,9 +40,9 @@ def login():
         abort(401)
     else:
         session_id = AUTH.create_session(email=email)
-        response = make_response()
+        response = jsonify({"email": f"{email}", "message": "logged in"})
         response.set_cookie("session_id", session_id)
-    return jsonify({"email": f"{email}", "message": "logged in"})
+        return response
 
 
 @app.route("/sessions", methods=["DELETE"], strict_slashes=False)
@@ -60,7 +60,10 @@ def logout():
 def profile():
     session_id = request.cookies["session_id"]
     user = AUTH.get_user_from_session_id(session_id)
-    return jsonify({"email": f"{user.email}"}), 200
+    if not user:
+        abort(403)
+    if user:
+        return jsonify({"email": f"{user.email}"}), 200
 
 
 if __name__ == "__main__":
